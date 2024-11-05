@@ -28,13 +28,17 @@ static NSCalendar *calendar = nil;
     if (monthNumber < 1 || monthNumber > 12) {
         return nil;
     }
+    NSDateFormatter *dateFormatter = [DateHelper sharedDateFormatter];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_EN"]];
 
-    [[DateHelper sharedDateFormatter] setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_EN"]];
-    [DateHelper sharedDateFormatter].dateFormat = @"MMMM";
+    NSDateComponents *components = [NSDateComponents new];
+    [components setMonth:monthNumber];
 
-    NSDate *date = [NSDate dateFrom:1 month:monthNumber year:2024];
+    NSDate *date = [[DateHelper sharedCalendar] dateFromComponents:components];
 
-    NSString *monthName = [[DateHelper sharedDateFormatter] stringFromDate:date];
+    dateFormatter.dateFormat = @"MMMM";
+
+    NSString *monthName = [dateFormatter stringFromDate:date];
 
     return monthName;
 }
@@ -45,10 +49,10 @@ static NSCalendar *calendar = nil;
     if (date.length == 0) {
         return 0;
     }
+    NSDateFormatter *dateFormatter = [DateHelper sharedDateFormatter];
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
 
-    [DateHelper sharedDateFormatter].dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
-
-    NSDate *dateObject = [[DateHelper sharedDateFormatter] dateFromString:date];
+    NSDate *dateObject = [dateFormatter dateFromString:date];
 
     if (!dateObject) {
         return 0;
@@ -67,11 +71,11 @@ static NSCalendar *calendar = nil;
     if (!date) {
         return nil;
     }
+    NSDateFormatter *dateFormatter = [DateHelper sharedDateFormatter];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
+    dateFormatter.dateFormat = @"EEE";
 
-    [[DateHelper sharedDateFormatter] setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"]];
-    [DateHelper sharedDateFormatter].dateFormat = @"EEE";
-
-    NSString *dayName = [[DateHelper sharedDateFormatter] stringFromDate:date];
+    NSString *dayName = [dateFormatter stringFromDate:date];
 
     return dayName;
 }
